@@ -124,8 +124,53 @@ wiki_text = """ Electric charge is the physical property of matter that causes
                 quantum electrodynamics.
             """
 
-#TODO add option for input parameters, maybe use file or url
+#TODO add option for input parameters, maybe use url
+
+import argparse   #Needed for the argument parsing
+import sys        #for sys.stderr
+
+def verb_print(msg, args):
+    '''
+    This will only print the message if verbosity is enabled
+    '''
+    if args.verbose:
+        print(msg)
+
+
+
 def main():
+    #Section for dealing with input argument parsing
+
+    parser = argparse.ArgumentParser(description =
+                                    'Get statistics about a piece of text')
+    parser.add_argument('-f','--file', help = 'Specify a filename to parse')
+    parser.add_argument('-v', '--verbose',
+                        help = 'Enable more verbose feedback',
+                        action = 'store_true')
+
+    args = parser.parse_args()
+
+    if args.verbose:
+        print('Verbosity turned on')
+
+    if args.file:
+        try:
+            fname = open(args.file, 'r')
+        except FileNotFoundError as inst:
+            print(inst, file = sys.stderr)
+            sys.exit(inst.errno)
+
+        else:
+            word_stats = word_distribution()
+            verb_print('Using file \'%s\'' % (args.file) , args)
+            #TODO investigate whether this is the optimum way of reaging from
+            #a file for this purpose
+            for line in fname:
+                word_stats.extract_stats(line)
+            fname.close()
+            word_stats.print_sorted_dictionary(word_stats.freq_table)
+            sys.exit(0)
+
     word_stats = word_distribution()
     word_stats.extract_stats(wiki_text)
     word_stats.print_sorted_dictionary(word_stats.freq_table)
