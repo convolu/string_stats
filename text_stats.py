@@ -1,4 +1,4 @@
-class word_distribution():
+class text_stats():
     def __init__(self):
         '''
         Class initialisation, this class initialises the list of words that is
@@ -126,7 +126,7 @@ wiki_text = """ Electric charge is the physical property of matter that causes
 
 #TODO add option for input parameters, maybe use file or url
 def main():
-    word_stats = word_distribution()
+    word_stats = text_stats()
     word_stats.extract_stats(wiki_text)
     word_stats.print_sorted_dictionary(word_stats.freq_table)
 
