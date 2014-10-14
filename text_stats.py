@@ -77,11 +77,9 @@ class text_stats():
         return freq_table
 
     def print_sorted_dictionary(self, dict_table):
-        for item in sorted(dict_table.items(),
-                           key = lambda x: (x[1], x[0]),
-                           reverse = True
-                           ):
-            print("Count: %i - \'%s\'" % (item[1], item[0]))
+        for freq, word in sorted(dict_table.items(),
+                           key = lambda x: (-1*x[1], x[0]) ):
+            print("Count: %i - \'%s\'" % (word, freq))
 
     def extract_stats(self, text):
         self.__list_from_text(text)
