@@ -83,6 +83,15 @@ class simple_unit_tests(unittest.TestCase):
 
         self.assertEqual(word_stats.freq_table, dict(hello=1))
 
+    def test_word_count(self):
+        '''
+        Test whether the word count is correct
+        '''
+        word_stats = text_stats.text_stats()
+        word_stats.extract_stats('Hello there this is a long sentence')
+        self.assertEqual(word_stats.get_total_words(), 7)
+
+
 
 if __name__ == '__main__':
     unittest.main()

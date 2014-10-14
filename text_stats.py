@@ -7,6 +7,7 @@ class text_stats():
         self.word_list = []
         self.freq_table = {}
         self.excluded_words = set()
+        self.total_words = 0
 
     def __list_from_text(self, text):
         '''
@@ -96,4 +97,14 @@ class text_stats():
         self.add_excluded_words(excl)
         self.remove_excluded_words()
         self.word_list.clear()
+        self.__update_total_words()
 
+    def __calculate_total_words(self):
+        return sum(self.freq_table.values())
+
+    def __update_total_words(self):
+        self.total_words = self.__calculate_total_words()
+
+    def get_total_words(self):
+        self.__update_total_words()
+        return self.total_words
