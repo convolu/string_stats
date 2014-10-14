@@ -13,11 +13,9 @@ class text_stats():
         This function assumes that the words are whitespace delimited.
         Each of the words is not unique.
         '''
-        ret_list = []
 
-        if len(text) > 0:
-            ret_list = text.split() #.split() removes empty strings
-
+        #.split() removes empty strings
+        ret_list = text.split() if len(text) > 0 else []
         self.word_list = ret_list
 
     def __clean_trailing_symbols(self, text):
@@ -40,35 +38,33 @@ class text_stats():
         This function uses list comprehension to remove empty elements from
         the list
         '''
-        words[:] = [word for word in words if len(word) > 0]
-
-    def __remove_case(self, text):
-        return text.casefold()
+        return [word for word in words if len(word) > 0]
 
     def __remove_case_from_list(self, words):
         '''
         This function takes the list of words and forces lowercase so as to
         prepare for the frequency count
         '''
-        for i in range(len(words)):
-            words[i] = self.__remove_case(words[i])
+        return [word.casefold() for word in words]
 
     def __tidy_list(self):
         '''
         This function removes trailing symbols and empty entries from the list
         as well as forces lowercase to prepare for the word frequency count
         '''
-        for i in range(len(self.word_list)):
-            self.word_list[i] = self.__clean_trailing_symbols(self.word_list[i])
 
-        self.__remove_empty_strings(self.word_list)
-        self.__remove_case_from_list(self.word_list)
+        self.word_list[:] = self.__remove_empty_strings(self.word_list)
+
+        self.word_list[:] = map(self.__clean_trailing_symbols,self.word_list)
+
+        self.word_list[:] = self.__remove_case_from_list(self.word_list)
 
     def __count_word_frequency(self, words):
         '''
         This function updates the dictionary with the count of
         '''
         freq_table = self.freq_table
+
         for word in words:
             if word not in freq_table.keys():
                 freq_table[word] = 1
@@ -79,7 +75,7 @@ class text_stats():
     def print_sorted_dictionary(self, dict_table):
         for freq, word in sorted(dict_table.items(),
                            key = lambda x: (-1*x[1], x[0]) ):
-            print("Count: %i - \'%s\'" % (word, freq))
+            print("Count:{0:3d} - \'{1:s}\'".format(word, freq))
 
     def extract_stats(self, text):
         self.__list_from_text(text)
