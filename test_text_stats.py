@@ -45,6 +45,43 @@ class simple_unit_tests(unittest.TestCase):
 
         self.assertEqual(word_stats.freq_table, dict(hello = 2))
 
+    def test_add_excluded_words(self):
+        '''
+        Test whether adding a new excluded word works internally
+        '''
+        word_stats = text_stats.text_stats()
+        word_stats.add_excluded_words(['one','two','three'])
+
+        self.assertEqual(word_stats.excluded_words, set(['one','two','three']) )
+
+    def test_append_excluded_words(self):
+        '''
+        Test whether extending the excluded word set works appropriately
+        '''
+        word_stats = text_stats.text_stats()
+        word_stats.add_excluded_words(['one','two','three'])
+        word_stats.add_excluded_words(['four','five','six'])
+        self.assertEqual(word_stats.excluded_words,
+                         set(['one','two','three','four','five','six']) )
+
+    def test_excluded_word_case(self):
+        '''
+        Test whether the excluded words are converted into lowercase
+        '''
+        word_stats = text_stats.text_stats()
+        word_stats.add_excluded_words(['One','Two','ThrEe'])
+
+        self.assertEqual(word_stats.excluded_words, set(['one','two','three']) )
+
+
+    def test_exclusion(self):
+        '''
+        Test whether excluding a word works
+        '''
+        word_stats = text_stats.text_stats()
+        word_stats.extract_stats('Hello there', ['there'])
+
+        self.assertEqual(word_stats.freq_table, dict(hello=1))
 
 
 if __name__ == '__main__':
