@@ -8,6 +8,7 @@ class text_stats():
         self.freq_table = {}
         self.excluded_words = set()
         self.total_words = 0
+        self.unique_words = 0
 
     def __list_from_text(self, text):
         '''
@@ -76,16 +77,29 @@ class text_stats():
         return freq_table
 
     def add_excluded_words(self, ecl_words):
+        '''
+        This function takes a list of words in a list and adds them to the
+        internal set that keeps track of which words are to be ignored or
+        removed from the frequency keeping dictionary
+        '''
         lowercase_ecl_words = self.__remove_case_from_list(ecl_words)
         self.excluded_words.update(set(lowercase_ecl_words))
 
     def remove_excluded_words(self):
-
+        '''
+        This function removes the words that are to be excluded from the
+        frequency table
+        '''
         for word in self.excluded_words:
             if word in self.freq_table:
                 del self.freq_table[word]
 
     def print_sorted_dictionary(self, dict_table):
+        '''
+        Prints the frequency tabled in a sorted manner, with decreasing
+        frequency. For entries that have the same frequency, it keeps
+        alphabetic order
+        '''
         for freq, word in sorted(dict_table.items(),
                                  key=lambda x: (-1*x[1], x[0])):
             print("Count:{0:3d} - \'{1:s}\'".format(word, freq))
@@ -98,13 +112,44 @@ class text_stats():
         self.remove_excluded_words()
         self.word_list.clear()
         self.__update_total_words()
+        self.get_unique_word_count()
 
     def __calculate_total_words(self):
+        '''
+        Returns the total words currently included in the frequency table
+        '''
         return sum(self.freq_table.values())
 
     def __update_total_words(self):
+        '''
+        Updates the total no of words in the internal representation
+        '''
         self.total_words = self.__calculate_total_words()
 
     def get_total_words(self):
+        '''
+        Returns the total number of words currently in the frequency table
+        '''
         self.__update_total_words()
         return self.total_words
+
+    def __calculate_unique_words(self):
+        '''
+        Returns the count of unique words currently included in the frequency
+        table
+        '''
+        return len(self.freq_table)
+
+    def __update_unique_words(self):
+        '''
+        Updates the count of unique words in the internal representation
+        '''
+        self.unique_words = self.__calculate_unique_words()
+
+    def get_unique_word_count(self):
+        '''
+        Returns the count of unique words currently in the frequency table
+        '''
+        self.__update_unique_words()
+        return self.unique_words
+

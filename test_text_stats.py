@@ -91,7 +91,14 @@ class simple_unit_tests(unittest.TestCase):
         word_stats.extract_stats('Hello there this is a long sentence')
         self.assertEqual(word_stats.get_total_words(), 7)
 
+    def test_unique_word_count(self):
+        '''
+        Test whether the unique word count is correct
+        '''
+        word_stats = text_stats.text_stats()
+        word_stats.extract_stats('Hello hello hello')
 
+        self.assertEqual(word_stats.get_unique_word_count(), 1)
 
 if __name__ == '__main__':
     unittest.main()
